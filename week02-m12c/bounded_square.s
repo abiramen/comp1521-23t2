@@ -11,6 +11,15 @@ main:
 	syscall				#
 	move	$t0, $v0		# scanf("%d", &x);
 
+	ble	$t0, 46340, x_le_46340
+
+	li	$v0, 4			# syscall 4: print_string
+	la	$a0, square_too_big_msg	#
+	syscall				# printf("square too big for 32 bits");
+
+	b	epilogue
+
+x_le_46340:
 	mul	$t1, $t0, $t0		# y = x * x;
 	
 	li	$v0, 1			# syscall 1: print_int
@@ -21,7 +30,7 @@ main:
 	li	$a0, '\n'		#
 	syscall				# putchar('\n');
 
-
+epilogue:
 	li	$v0, 0			#
 	jr	$ra			# return 0;
 
@@ -29,3 +38,5 @@ main:
 
 enter_number_msg:
 	.asciiz	"Enter a number: "
+square_too_big_msg:
+	.asciiz "square too big for 32 bits\n"
